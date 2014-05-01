@@ -22,5 +22,6 @@
                 <MenuItem Name="aboutProject" Header="About SpritePacker" Command=""></MenuItem>
             </MenuItem>
         </Menu>
+        <StatusBar Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"></StatusBar>
     </Grid>
 </Window>
