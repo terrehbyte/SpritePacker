@@ -107,23 +107,29 @@ namespace SpritePacker
             BitmapEncoder imageEnc;
 
             // Decide which encoder to use
-            if (fileExt.ToLower() == ".png")
+            switch (fileExt.ToLower())
             {
-                imageEnc = new PngBitmapEncoder();
+                case (".png"):
+                    {
+                        imageEnc = new PngBitmapEncoder();
+                        break;
+                    }
+                case (".jpg"):
+                    {
+                        imageEnc = new JpegBitmapEncoder();
+                        break;
+                    }
+                case (".bmp"):
+                    {
+                        imageEnc = new BmpBitmapEncoder();
+                        break;
+                    }
+                default:
+                    {
+                        throw new System.Exception("Invalid file type specified for saving!");
+                    }
             }
-            else if (fileExt.ToLower() == ".jpg")
-            {
-                imageEnc = new JpegBitmapEncoder();
-            }
-            else if (fileExt.ToLower() == ".bmp")
-            {
-                imageEnc = new BmpBitmapEncoder();
-            }
-            else
-            {
-                // this probably isn't serious enough to crash the program, but I don't want to handle it yet
-                throw new System.Exception("Invalid file format chosen!");
-            }
+
 
             imageEnc.Frames.Add(BitmapFrame.Create(newImage));
 
