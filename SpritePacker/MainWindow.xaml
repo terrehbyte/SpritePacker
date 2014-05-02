@@ -11,17 +11,17 @@
         <CommandBinding Command="{x:Static local:CustomCommands.AboutProject}" Executed="OnAboutProjectExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Grid>
-        <Menu Height="23" HorizontalAlignment="Stretch" Name="MenuBar" VerticalAlignment="Top">
+        <Menu Name="MenuBar" Height="23" HorizontalAlignment="Stretch"  VerticalAlignment="Top">
             <MenuItem Header="_File">
-                <MenuItem Name="fileOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"></MenuItem>
-                <MenuItem Name="fileSave" Header="_Save..." Command="Save" InputGestureText="Ctrl+S"></MenuItem>
-                <MenuItem Name="fileSaveAs" Header="_Save As..." Command="SaveAs" InputGestureText="Ctrl+Alt+S"></MenuItem>
-                <MenuItem Name="fileExit" Header="_Exit" Command="{x:Static local:CustomCommands.Exit}" InputGestureText="Alt+F4"></MenuItem>
+                <MenuItem Name="fileOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
+                <MenuItem Name="fileSave" Header="_Save..." Command="Save" InputGestureText="Ctrl+S"/>
+                <MenuItem Name="fileSaveAs" Header="_Save As..." Command="SaveAs" InputGestureText="Ctrl+Alt+S"/>
+                <MenuItem Name="fileExit" Header="_Exit" Command="{x:Static local:CustomCommands.Exit}" InputGestureText="Alt+F4"/>
             </MenuItem>
             <MenuItem Header="_About">
-                <MenuItem Name="aboutProject" Header="About SpritePacker" Command=""></MenuItem>
+                <MenuItem Name="aboutProject" Header="_About SpritePacker"></MenuItem>
             </MenuItem>
         </Menu>
-        <StatusBar Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"></StatusBar>
+        <StatusBar Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
     </Grid>
 </Window>
