@@ -19,7 +19,7 @@
                 <MenuItem Name="fileExit" Header="_Exit" Command="{x:Static local:CustomCommands.Exit}" InputGestureText="Alt+F4"/>
             </MenuItem>
             <MenuItem Header="_About">
-                <MenuItem Name="aboutProject" Header="_About SpritePacker"></MenuItem>
+                <MenuItem Name="aboutProject" Header="_About SpritePacker" Command="{x:Static local:CustomCommands.AboutProject}"></MenuItem>
             </MenuItem>
         </Menu>
         <StatusBar Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>

@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using System.IO;
 
+using System.Security;
+
 using System.Text.RegularExpressions;
 
-namespace SpritePacker
+namespace PlotPoints
 {
     // consider rewriting this class to require instantiation
     // for more control over dialog options
@@ -83,7 +86,7 @@ namespace SpritePacker
             if (diagResult == true)
             {
                 return saveDiag.FileName;   // this is actually the full/absolute string for file path
-                                            // (i.e. "C:\Users\Student\Pictures\testImage.png")
+                // (i.e. "C:\Users\Student\Pictures\testImage.png")
             }
             else
             {
@@ -106,7 +109,7 @@ namespace SpritePacker
             if (diagResult == true)
             {
                 return openDiag.FileName;   // this is actually the full/absolute string for file path
-                                            // (i.e. "C:\Users\Student\Pictures\testImage.png")
+                // (i.e. "C:\Users\Student\Pictures\testImage.png")
             }
             else
             {
@@ -151,13 +154,24 @@ namespace SpritePacker
             imageEnc.Frames.Add(BitmapFrame.Create(newImage));
 
             // Open a file stream to save things to
-            //  @terrehbyte: NEEDS error handling based on exceptions
-            //  @terrehbyte: test for file access (see SO: http://bit.ly/1jmIiRB )
-            FileStream saveStream = new FileStream(filePathName, FileMode.Create);
+            FileStream saveStream;
 
-            // Save into the stream
-            imageEnc.Save(saveStream);
-            saveStream.Close(); // always close the stream when you're done
+            try
+            {
+                saveStream = new FileStream(filePathName, FileMode.Create);
+
+                // Save into the stream
+                imageEnc.Save(saveStream);
+                saveStream.Close(); // always close the stream when you're done
+            }
+            catch (SecurityException ex)
+            {
+                MessageBox.Show("Try running with elevated permissions.\nError Message: " + ex.Message, "Security Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something is preventing Windows from saving this file.\nErrorMessage: " + ex.Message, "Unspecified Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     };
 }

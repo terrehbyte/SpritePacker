@@ -31,6 +31,7 @@ namespace SpritePacker
 
         private void OnAboutProjectExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen");
             return;
         }
     }
@@ -41,7 +42,7 @@ namespace SpritePacker
         static CustomCommands()
         {
             exitCommand = new RoutedCommand("Exit", typeof(CustomCommands));
-            aboutProjectCommand = new RoutedCommand("AboutProject", typeof(CommandBinding));
+            aboutProjectCommand = new RoutedCommand("AboutProject", typeof(CustomCommands));
         }
 
         public static RoutedCommand Exit
