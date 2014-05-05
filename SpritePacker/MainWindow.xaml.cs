@@ -31,7 +31,7 @@ namespace SpritePacker
 
         private void OnAboutProjectExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen");
+            MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen", "About TBYTE SpritePacker", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
     }
@@ -39,6 +39,7 @@ namespace SpritePacker
 
     static class CustomCommands
     {
+        // Define how custom commands will be referenced in the XAML
         static CustomCommands()
         {
             exitCommand = new RoutedCommand("Exit", typeof(CustomCommands));
