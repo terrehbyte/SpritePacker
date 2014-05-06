@@ -38,8 +38,17 @@ namespace SpritePacker.Model
         }
 
         // Functions
-        public BitmapImage BuildAtlas();
-        public void AddSubsprite(Subsprite addSub);
-        public void RemoveSubsprite(Subsprite removeSub);
+        public BitmapImage BuildAtlas()
+        {
+            throw new NotImplementedException();
+        }
+        public void AddSubsprite(Subsprite addSub)
+        {
+            throw new NotImplementedException();
+        }
+        public void RemoveSubsprite(Subsprite removeSub)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
