@@ -3,28 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows;                   // MessageBox
+using System.Windows.Media.Imaging;     // BitmapImage
 
-using System.IO;
+using System.IO;                        // Filestream
 
-using System.Security;
+using System.Security;                  // Exceptions
 
-using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;   // Regex
 
-namespace PlotPoints
+using Microsoft.Win32;                  // Open/Save Dialog
+
+namespace SpritePacker.Model
 {
-    // consider rewriting this class to require instantiation
-    // for more control over dialog options
-    static class ImageIO
+    /// <summary>
+    /// Handles File I/O for images
+    /// </summary>
+    class ImageIO
     {
+        public SaveFileDialog SaveDiag = new Microsoft.Win32.SaveFileDialog();
+        public OpenFileDialog OpenDiag = new Microsoft.Win32.OpenFileDialog();
+
         // - Filter Parameters -
         //  - 'p' for PNG
         //  - 'j' for JPG/JPEG
         //  - 'b' for BMP
         // Use any combination or none at all!
-
         // Used to build Win Open/SaveDialog filters
         private static string buildFilterStr(string customFilter)
         {
@@ -69,23 +73,17 @@ namespace PlotPoints
         }
 
         // Opens a Windows Save Dialog
-        public static string SaveDialog(string filter = "pjb")
+        public string SaveDialog()
         {
-            // Create a save file dialog
-            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
-            saveDiag.FileName = "";                           // default file name
-            saveDiag.Filter = ImageIO.buildFilterStr(filter); // string for filter
-            saveDiag.FilterIndex = 0;                         // Which filter is the default?
-
             // Show the dialog and store whether or not the user selected something
             //  false means cancel
             //  true means selection occurred
-            Nullable<bool> diagResult = saveDiag.ShowDialog();
+            Nullable<bool> diagResult = SaveDiag.ShowDialog();
 
             // Return file path if true, otherwise return null
             if (diagResult == true)
             {
-                return saveDiag.FileName;   // this is actually the full/absolute string for file path
+                return SaveDiag.FileName;   // this is actually the full/absolute string for file path
                 // (i.e. "C:\Users\Student\Pictures\testImage.png")
             }
             else
@@ -96,19 +94,14 @@ namespace PlotPoints
         }
 
         // Opens a Windows Open Dialog
-        public static string OpenDialog(string filter = "pjb")
+        public string OpenDialog()
         {
-            // Create an OpenFile Dialgo
-            Microsoft.Win32.OpenFileDialog openDiag = new Microsoft.Win32.OpenFileDialog();
-            openDiag.Multiselect = true;    // allow the user to select more than one thing
-            openDiag.Filter = ImageIO.buildFilterStr(filter);   // build the string for the filter
-
-            Nullable<bool> diagResult = openDiag.ShowDialog();
+            Nullable<bool> diagResult = OpenDiag.ShowDialog();
 
             // Return filename if true, otherwise return null
             if (diagResult == true)
             {
-                return openDiag.FileName;   // this is actually the full/absolute string for file path
+                return OpenDiag.FileName;   // this is actually the full/absolute string for file path
                 // (i.e. "C:\Users\Student\Pictures\testImage.png")
             }
             else
