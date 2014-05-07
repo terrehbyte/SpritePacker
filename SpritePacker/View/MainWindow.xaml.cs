@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Permissions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,13 @@ namespace SpritePacker.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
         public MainWindow()
         {
             InitializeComponent();
+
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnExHandler);
         }
 
         private void OnExitExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -34,8 +39,16 @@ namespace SpritePacker.View
             MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen", "About TBYTE SpritePacker", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
+
+        static void UnExHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            Console.WriteLine("UnExHandler caught: " + e.Message);
+            Console.WriteLine("Runtime terminating: {0}", args.IsTerminating);
+        }
     }
 
+    
 
     static class CustomCommands
     {
