@@ -9,6 +9,7 @@ namespace SpritePacker.Viewmodel
 {
     class PackerExportCom : ICommand
     {
+        // reference to PackerViewmodel
         private PackerViewmodel _packerView;
 
         public PackerExportCom(PackerViewmodel packerView)

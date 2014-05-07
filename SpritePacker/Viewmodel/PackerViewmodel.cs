@@ -13,8 +13,10 @@ namespace SpritePacker.Viewmodel
     {
         PackerViewmodel(Packer packer)
         {
+            // record packer
             Packer = packer;
 
+            // Assign ICommand
             AddCommand = new PackerAddCom(this);
             RemoveCommand = new PackerRemoveCom(this);
             ExportCommand = new PackerExportCom(this);
@@ -26,6 +28,7 @@ namespace SpritePacker.Viewmodel
         public ICommand PreviewCommand;
         public ICommand ExportCommand;
 
+        // References to sprite Packer
         private Packer _packer;
         public Packer Packer
         {

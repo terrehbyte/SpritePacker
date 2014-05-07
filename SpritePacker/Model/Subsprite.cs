@@ -9,7 +9,7 @@ namespace SpritePacker.Model
 {
     class Subsprite
     {
-        public string Name = null;
-        BitmapImage bitmapData;
+        public string Name = null;  // Name (for use in XML doc creation)
+        BitmapImage bitmapData;     // reference to actual image
     }
 }

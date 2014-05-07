@@ -13,14 +13,14 @@ namespace SpritePacker.Model
     class Packer : INotifyPropertyChanged
     {
         // Data Stores
-        public BitmapImage Atlas;
-        private Vector targetDims;
-        private List<Subsprite> subspriteList = new List<Subsprite>();
+        public BitmapImage Atlas;   // cached atlas
+        private Vector targetDims;  // x and y correspond to atlas width and height
+        private List<Subsprite> subspriteList = new List<Subsprite>();  // list of subsprites
         
         // Settings
-        public int Offset= 0;
-        public bool PowerOfTwo = false;
-        public enum SortingAlgos
+        public int Offset = 0;          // pixel offset between sprites
+        public bool PowerOfTwo = false; // whether atlas will be power of two
+        public enum SortingAlgos        // different sorting algorithms
         {
             None
         };
@@ -38,14 +38,27 @@ namespace SpritePacker.Model
         }
 
         // Functions
+
+        /// <summary>
+        /// Build sprite atlas from list of subsprites
+        /// </summary>
+        /// <returns>Returns sprite atlas as image</returns>
         public BitmapImage BuildAtlas()
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Adds a subsprite into the list
+        /// </summary>
+        /// <param name="addSub"></param>
         public void AddSubsprite(Subsprite addSub)
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Removes a subsprite from the list
+        /// </summary>
+        /// <param name="removeSub"></param>
         public void RemoveSubsprite(Subsprite removeSub)
         {
             throw new NotImplementedException();
