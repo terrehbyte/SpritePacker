@@ -11,12 +11,15 @@
         <CommandBinding Command="{x:Static local:CustomCommands.AboutProject}" Executed="OnAboutProjectExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+        <!--Application Rows-->
+        <Grid.RowDefinitions> 
+            <RowDefinition Height="Auto"></RowDefinition>   <!--Menu Bar-->
+            <RowDefinition Height="*"></RowDefinition>      <!--Content-->
+            <RowDefinition Height="Auto"></RowDefinition>   <!--Status Bar-->
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" Name="MenuBar" Height="23" HorizontalAlignment="Stretch"  VerticalAlignment="Top">
+        
+        <!--Menu Bar-->
+        <Menu Grid.Row="0" Name="MenuBar" HorizontalAlignment="Stretch"  VerticalAlignment="Top">
             <MenuItem Header="_File">
                 <MenuItem Name="fileOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                 <MenuItem Name="fileSave" Header="_Save..." Command="Save" InputGestureText="Ctrl+S"/>
@@ -27,8 +30,50 @@
                 <MenuItem Name="aboutProject" Header="_About SpritePacker" Command="{x:Static local:CustomCommands.AboutProject}"></MenuItem>
             </MenuItem>
         </Menu>
+        
+        <!--Content-->
         <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <!--Left Panel-->
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <ListBox>
+                    <ListBoxItem>URI A</ListBoxItem>
+                    <ListBoxItem>URI B</ListBoxItem>
+                    <ListBoxItem>URI C</ListBoxItem>
+                </ListBox>
+                <ComboBox>
+                    <ComboBoxItem Content="Test A"></ComboBoxItem>
+                    <ComboBoxItem Content="Test B"></ComboBoxItem>
+                </ComboBox>
+                <CheckBox>Power of Two</CheckBox>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Name="OffsetValue" Text="0"></TextBox>
+                    <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Content="Preview" HorizontalAlignment="Center"></Button>
+                    <Button Content="Export" HorizontalAlignment="Center"></Button>
+                </StackPanel>
+            </StackPanel> 
+            <ScrollViewer Grid.Column="2"></ScrollViewer>
+            
+            <!--Right Panel-->
+            <GridSplitter HorizontalAlignment="Right"
+                          VerticalAlignment="Stretch"
+                          Grid.Column="1" ResizeBehavior="PreviousAndNext"
+                          Width="5" Background="GhostWhite"></GridSplitter>
         </Grid>
-        <StatusBar Grid.Row="2" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+        
+        <!--Status Bar-->
+        <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+            <TextBlock>Example Text</TextBlock>
+        </StatusBar>
     </Grid>
 </Window>
