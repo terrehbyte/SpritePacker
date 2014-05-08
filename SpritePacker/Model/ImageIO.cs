@@ -5,11 +5,8 @@ using System.Text;
 
 using System.Windows;                   // MessageBox
 using System.Windows.Media.Imaging;     // BitmapImage
-
 using System.IO;                        // Filestream
-
 using System.Security;                  // Exceptions
-
 using System.Text.RegularExpressions;   // Regex
 
 using Microsoft.Win32;                  // Open/Save Dialog
@@ -30,7 +27,7 @@ namespace SpritePacker.Model
         //  - 'b' for BMP
         // Use any combination or none at all!
         // Used to build Win Open/SaveDialog filters
-        private static string buildFilterStr(string customFilter)
+        public static string BuildFilterStr(string customFilter)
         {
             // create an empty string to append things to
             string internalFilter = "";

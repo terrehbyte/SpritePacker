@@ -16,12 +16,12 @@ namespace SpritePacker.Model
 {
     class Packer : INotifyPropertyChanged
     {
-        // Data Stores
+        // = Data Stores =
         public BitmapImage Atlas;   // cached atlas
         private Vector targetDims;  // x and y correspond to atlas width and height
         public  List<Subsprite> SubspriteList = new List<Subsprite>();  // list of subsprites
         
-        // Settings
+        // = Settings =
         private int _offset = 0;
         public int Offset
         {
@@ -70,7 +70,7 @@ namespace SpritePacker.Model
             Strip
         };
 
-        // Events
+        // = Events =
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
@@ -82,8 +82,12 @@ namespace SpritePacker.Model
             }
         }
 
-        // Functions
+        // = Functions =
 
+        /// <summary>
+        /// Calculates the target size of the atlas
+        /// </summary>
+        /// <returns>Returns a Vector with width and height in X and Y respectively</returns>
         private Vector calculateAtlasDims()
         {
             // Create variable to store dims
@@ -181,8 +185,24 @@ namespace SpritePacker.Model
             return Atlas;
         }
 
-        private delegate BitmapImage SubspriteSorter(List<Subsprite> subsprites);
+        /// <summary>
+        /// Adds a subsprite into the list
+        /// </summary>
+        /// <param name="addSub">Subsprite to be added to the list</param>
+        public void AddSubsprite(Subsprite addSub)
+        {
+            SubspriteList.Add(addSub);
+        }
+        /// <summary>
+        /// Removes a subsprite from the list
+        /// </summary>
+        /// <param name="removeSub">Subsprite to be removed from the list</param>
+        public void RemoveSubsprite(Subsprite removeSub)
+        {
+            SubspriteList.Remove(removeSub);
+        }
 
+        private delegate BitmapImage SubspriteSorter(List<Subsprite> subsprites);
         private BitmapImage stripSort(List<Subsprite> subsprites)
         {
             BitmapImage imageResult;
@@ -235,23 +255,6 @@ namespace SpritePacker.Model
 
             // Record resulting bitmap into imageResult
             return imageResult;
-        }
-
-        /// <summary>
-        /// Adds a subsprite into the list
-        /// </summary>
-        /// <param name="addSub"></param>
-        public void AddSubsprite(Subsprite addSub)
-        {
-            SubspriteList.Add(addSub);
-        }
-        /// <summary>
-        /// Removes a subsprite from the list
-        /// </summary>
-        /// <param name="removeSub"></param>
-        public void RemoveSubsprite(Subsprite removeSub)
-        {
-            SubspriteList.Remove(removeSub);
         }
     }
 }

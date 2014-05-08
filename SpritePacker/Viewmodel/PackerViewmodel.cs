@@ -13,19 +13,17 @@ namespace SpritePacker.Viewmodel
     {
         public PackerViewmodel(Packer packer)
         {
-            // record packer
+            // Record reference to packer
             Packer = packer;
 
             // Assign ICommand
-            AddCommand = new PackerAddCom(this);
-            RemoveCommand = new PackerRemoveCom(this);
-            ExportCommand = new PackerExportCom(this);
-            PreviewCommand = new PackerPreviewCom(this);
+            AddCommand      = new PackerAddCom(this);
+            RemoveCommand   = new PackerRemoveCom(this);
+            ExportCommand   = new PackerExportCom(this);
+            PreviewCommand  = new PackerPreviewCom(this);
         }
 
-        // NEVER FORGET TO DEFINE THESE ICOMMANDS
-        // NOTHING WILL WORK
-
+        // Bindable commands
         public ICommand AddCommand
         {
             get;
@@ -61,6 +59,7 @@ namespace SpritePacker.Viewmodel
             }
         }
 
+        // Properties
         public bool CanAdd
         {
             get
@@ -90,21 +89,22 @@ namespace SpritePacker.Viewmodel
             }
         }
 
+        // Internal Calls to Model
         public void AddSubsprite()
         {
-            throw new NotImplementedException();
-        }
+            ImageIO imgIO = new ImageIO();
 
+            imgIO.OpenDiag.Filter = ImageIO.BuildFilterStr("pjb");
+            imgIO.OpenDialog();
+        }
         public void RemoveSubsprite()
         {
             throw new NotImplementedException();
         }
-
         public void PreviewAtlas()
         {
             throw new NotImplementedException();
         }
-
         public void ExportAtlas()
         {
             throw new NotImplementedException();
