@@ -27,6 +27,10 @@ namespace SpritePacker.View
 
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnExHandler);
+
+
+            SpritePacker.Model.Packer packerSprite = new SpritePacker.Model.Packer();
+            DataContext = new SpritePacker.Viewmodel.PackerViewmodel(packerSprite);
         }
 
         private void OnExitExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -36,7 +40,10 @@ namespace SpritePacker.View
 
         private void OnAboutProjectExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen", "About TBYTE SpritePacker", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBoxResult msg = MessageBox.Show("- TBYTE SpritePacker -\n\nAIE Project 2013-2014\n\n Terry Nguyen",
+                                                    "About TBYTE SpritePacker",
+                                                    MessageBoxButton.OK,
+                                                    MessageBoxImage.Information);
             return;
         }
 

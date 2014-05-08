@@ -11,7 +11,7 @@ namespace SpritePacker.Viewmodel
 {
     internal class PackerViewmodel
     {
-        PackerViewmodel(Packer packer)
+        public PackerViewmodel(Packer packer)
         {
             // record packer
             Packer = packer;
@@ -23,10 +23,29 @@ namespace SpritePacker.Viewmodel
             PreviewCommand = new PackerPreviewCom(this);
         }
 
-        public ICommand AddCommand;
-        public ICommand RemoveCommand;
-        public ICommand PreviewCommand;
-        public ICommand ExportCommand;
+        // NEVER FORGET TO DEFINE THESE ICOMMANDS
+        // NOTHING WILL WORK
+
+        public ICommand AddCommand
+        {
+            get;
+            private set;
+        }
+        public ICommand RemoveCommand
+        {
+            get;
+            private set;
+        }
+        public ICommand PreviewCommand
+        {
+            get;
+            private set;
+        }
+        public ICommand ExportCommand
+        {
+            get;
+            private set;
+        }
 
         // References to sprite Packer
         private Packer _packer;
@@ -73,18 +92,22 @@ namespace SpritePacker.Viewmodel
 
         public void AddSubsprite()
         {
+            throw new NotImplementedException();
         }
 
         public void RemoveSubsprite()
         {
+            throw new NotImplementedException();
         }
 
         public void PreviewAtlas()
         {
+            throw new NotImplementedException();
         }
 
         public void ExportAtlas()
         {
+            throw new NotImplementedException();
         }
     }
 }

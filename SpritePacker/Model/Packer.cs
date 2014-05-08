@@ -32,11 +32,38 @@ namespace SpritePacker.Model
             set
             {
                 _offset = value >= 0 ? value : 0;
+                OnPropertyChanged("Offset");
             }
 
         }          // pixel offset between sprites
-        public bool PowerOfTwo = false; // whether atlas will be power of two
-        public SortingAlgos DesiredSort;
+
+        private bool _powerOfTwo;
+        public bool PowerOfTwo
+        {
+            get
+            {
+                return _powerOfTwo;
+            }
+            set
+            {
+                _powerOfTwo = value;
+                OnPropertyChanged("PowerOfTwo");
+            }
+        } // whether atlas will be power of two
+        
+        private SortingAlgos _desiredSort;
+        public SortingAlgos DesiredSort
+        {
+            get
+            {
+                return _desiredSort;
+            }
+            set
+            {
+                _desiredSort = value;
+                OnPropertyChanged("DesiredSort");
+            }
+        }
 
         public enum SortingAlgos        // different sorting algorithms
         {

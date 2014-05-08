@@ -46,6 +46,10 @@
                     <ListBoxItem>URI B</ListBoxItem>
                     <ListBoxItem>URI C</ListBoxItem>
                 </ListBox>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button HorizontalAlignment="Center" Command="{Binding AddCommand}">Add</Button>
+                    <Button HorizontalAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
+                </StackPanel>
                 <ComboBox>
                     <ComboBoxItem Content="Test A"></ComboBoxItem>
                     <ComboBoxItem Content="Test B"></ComboBoxItem>
@@ -53,13 +57,13 @@
                 <CheckBox>Power of Two</CheckBox>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Name="OffsetValue" Text="0"></TextBox>
+                    <TextBox Name="OffsetValue" Text="{Binding Packer.OffsetValue, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button Content="Preview" HorizontalAlignment="Center"></Button>
-                    <Button Content="Export" HorizontalAlignment="Center"></Button>
+                    <Button Content="Preview" HorizontalAlignment="Center" Command="{Binding PreviewCommand}"></Button>
+                    <Button Content="Export" HorizontalAlignment="Center" Command="{Binding ExportCommand}"></Button>
                 </StackPanel>
             </StackPanel> 
             <ScrollViewer Grid.Column="2"></ScrollViewer>
@@ -73,7 +77,7 @@
         
         <!--Status Bar-->
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <TextBlock>Example Text</TextBlock>
+            <TextBlock Text="{Binding Packer.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StatusBar>
     </Grid>
 </Window>
