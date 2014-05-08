@@ -9,7 +9,7 @@ using SpritePacker.Model;   // SpritePacker
 
 namespace SpritePacker.Viewmodel
 {
-    class PackerViewmodel
+    internal class PackerViewmodel
     {
         PackerViewmodel(Packer packer)
         {
@@ -42,9 +42,49 @@ namespace SpritePacker.Viewmodel
             }
         }
 
-        public bool CanAdd;
-        public bool CanRemove;
-        public bool CanPreview;
-        public bool CanExport;
+        public bool CanAdd
+        {
+            get
+            {
+                return (Packer.SubspriteList != null);
+            }
+        }
+        public bool CanRemove
+        {
+            get
+            {
+                return (Packer.SubspriteList.Count > 0);
+            }
+        }
+        public bool CanPreview
+        {
+            get
+            {
+                return (Packer.SubspriteList.Count > 0);
+            }
+        }
+        public bool CanExport
+        {
+            get
+            {
+                return (Packer.SubspriteList.Count > 0);
+            }
+        }
+
+        public void AddSubsprite()
+        {
+        }
+
+        public void RemoveSubsprite()
+        {
+        }
+
+        public void PreviewAtlas()
+        {
+        }
+
+        public void ExportAtlas()
+        {
+        }
     }
 }

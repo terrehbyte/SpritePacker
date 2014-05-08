@@ -19,7 +19,7 @@ namespace SpritePacker.Viewmodel
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return _packerView.CanExport;
         }
 
         public event EventHandler CanExecuteChanged
@@ -36,7 +36,7 @@ namespace SpritePacker.Viewmodel
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            _packerView.ExportAtlas();
         }
     }
 }

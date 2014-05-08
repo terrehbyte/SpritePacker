@@ -19,7 +19,7 @@ namespace SpritePacker.Model
         // Data Stores
         public BitmapImage Atlas;   // cached atlas
         private Vector targetDims;  // x and y correspond to atlas width and height
-        private List<Subsprite> subspriteList = new List<Subsprite>();  // list of subsprites
+        public  List<Subsprite> SubspriteList = new List<Subsprite>();  // list of subsprites
         
         // Settings
         private int _offset = 0;
@@ -65,10 +65,10 @@ namespace SpritePacker.Model
             int iTotalWidth = 0;
 
             // Get the total width
-            for (int i = 0; i < subspriteList.Count - 1; i++)
+            for (int i = 0; i < SubspriteList.Count - 1; i++)
             {
                 // Add each individual subsprite's width
-                iTotalWidth += subspriteList[i].bitmapData.PixelWidth;
+                iTotalWidth += SubspriteList[i].bitmapData.PixelWidth;
 
                 // Add the offset between each sprite
                 iTotalWidth += Offset;
@@ -77,14 +77,14 @@ namespace SpritePacker.Model
             int iTotalHeight = 0;
 
             // Get the biggest height
-            for (int i = 1; i < subspriteList.Count - 1; i++)
+            for (int i = 1; i < SubspriteList.Count - 1; i++)
             {
-                iTotalHeight = Math.Max(subspriteList[i - 1].bitmapData.PixelHeight,
-                                        subspriteList[i].bitmapData.PixelHeight);
+                iTotalHeight = Math.Max(SubspriteList[i - 1].bitmapData.PixelHeight,
+                                        SubspriteList[i].bitmapData.PixelHeight);
             }
 
             // Add offset of all subsprites going down
-            iTotalHeight += subspriteList.Count * Offset;
+            iTotalHeight += SubspriteList.Count * Offset;
 
             // @terrehbyte: When should the offset be added in?
             //              We'll do it here for now, but figure out
@@ -148,7 +148,7 @@ namespace SpritePacker.Model
             }
 
             // Sort the Subsprites & Store the Returned Value
-            Atlas = sorter(subspriteList);
+            Atlas = sorter(SubspriteList);
 
             // Return the stored value
             return Atlas;
@@ -160,12 +160,12 @@ namespace SpritePacker.Model
         {
             BitmapImage imageResult;
 
-            BitmapFrame[] frames = new BitmapFrame[subspriteList.Count];
+            BitmapFrame[] frames = new BitmapFrame[SubspriteList.Count];
 
-            for (int i = 0; i < subspriteList.Count; i++)
+            for (int i = 0; i < SubspriteList.Count; i++)
             {
                 // create bitmap frames
-                frames[i] = BitmapDecoder.Create(subspriteList[i].bitmapData.UriSource,
+                frames[i] = BitmapDecoder.Create(SubspriteList[i].bitmapData.UriSource,
                                                  BitmapCreateOptions.DelayCreation,
                                                  BitmapCacheOption.OnLoad).Frames.First();
             }
@@ -216,7 +216,7 @@ namespace SpritePacker.Model
         /// <param name="addSub"></param>
         public void AddSubsprite(Subsprite addSub)
         {
-            subspriteList.Add(addSub);
+            SubspriteList.Add(addSub);
         }
         /// <summary>
         /// Removes a subsprite from the list
@@ -224,7 +224,7 @@ namespace SpritePacker.Model
         /// <param name="removeSub"></param>
         public void RemoveSubsprite(Subsprite removeSub)
         {
-            subspriteList.Remove(removeSub);
+            SubspriteList.Remove(removeSub);
         }
     }
 }
