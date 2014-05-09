@@ -70,7 +70,7 @@ namespace SpritePacker.Model
         }
 
         // Opens a Windows Save Dialog
-        public string SaveDialog()
+        public string CreateSaveDialog()
         {
             // Show the dialog and store whether or not the user selected something
             //  false means cancel
@@ -91,7 +91,7 @@ namespace SpritePacker.Model
         }
 
         // Opens a Windows Open Dialog
-        public string OpenDialog()
+        public string CreateOpenDialog()
         {
             Nullable<bool> diagResult = OpenDiag.ShowDialog();
 
@@ -163,5 +163,6 @@ namespace SpritePacker.Model
                 MessageBox.Show("Something is preventing Windows from saving this file.\nErrorMessage: " + ex.Message, "Unspecified Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //public static void Save(
     };
 }

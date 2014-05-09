@@ -95,7 +95,26 @@ namespace SpritePacker.Viewmodel
             ImageIO imgIO = new ImageIO();
 
             imgIO.OpenDiag.Filter = ImageIO.BuildFilterStr("pjb");
-            imgIO.OpenDialog();
+            imgIO.OpenDiag.Multiselect = true;
+
+            if (imgIO.CreateOpenDialog() != null)
+            {
+                string[] selectedSubs = imgIO.OpenDiag.FileNames;
+
+                for (int i = 0; i < selectedSubs.Length; i++)
+                {
+                    Packer.AddSubsprite(new Subsprite(selectedSubs[i]));
+                }
+
+                int Dummy;
+                Packer.BuildAtlas();
+            }
+
+            
+            else
+            {
+                return;
+            }
         }
         public void RemoveSubsprite()
         {

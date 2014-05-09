@@ -169,7 +169,7 @@ namespace SpritePacker.Model
             {
                 case (SortingAlgos.Strip):
                     {
-                        sorter = stripSort;
+                        sorter = stripSorter;
                         break;
                     }
                 default:
@@ -203,7 +203,7 @@ namespace SpritePacker.Model
         }
 
         private delegate BitmapImage SubspriteSorter(List<Subsprite> subsprites);
-        private BitmapImage stripSort(List<Subsprite> subsprites)
+        private BitmapImage stripSorter(List<Subsprite> subsprites)
         {
             BitmapImage imageResult;
 
@@ -234,9 +234,10 @@ namespace SpritePacker.Model
             // Convert DrawingVisual into a BitmapSource
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)targetDims.X, (int)targetDims.Y, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(drawingVisual);
+            bmp.Freeze();   // finalize the image
 
-            BmpBitmapEncoder bmpEncoder = new BmpBitmapEncoder();
-            bmpEncoder.Frames.Add(BitmapFrame.Create(bmp));
+            PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
+            pngEncoder.Frames.Add(BitmapFrame.Create(bmp));
 
             // Stuff BitmapSource into encoder
             ImageIO imageIOHandler = new ImageIO();
@@ -247,11 +248,23 @@ namespace SpritePacker.Model
             // Save to temporary file
             using (Stream stream = File.Create(cd + @"\temp.bmp"))
             {
-                bmpEncoder.Save(stream);
+                pngEncoder.Save(stream);
                 stream.Close();
             }
 
-            imageResult = new BitmapImage(new Uri(cd + "\temp.bmp"));
+            try
+            {
+                Uri tempPath = new Uri(cd + "\\temp.bmp");
+                imageResult = new BitmapImage(tempPath);
+            }
+            catch (System.ArgumentNullException)
+            {
+                return null;
+            }
+            catch (System.UriFormatException)
+            {
+                return null;
+            }
 
             // Record resulting bitmap into imageResult
             return imageResult;
