@@ -12,6 +12,8 @@ using System.ComponentModel;        // INotifyPropertyChanged
 
 using System.IO;
 
+using System.Diagnostics;           // Assert
+
 namespace SpritePacker.Model
 {
     class Packer : INotifyPropertyChanged
@@ -96,7 +98,7 @@ namespace SpritePacker.Model
             int iTotalWidth = 0;
 
             // Get the total width
-            for (int i = 0; i < SubspriteList.Count - 1; i++)
+            for (int i = 0; i < SubspriteList.Count; i++)
             {
                 // Add each individual subsprite's width
                 iTotalWidth += SubspriteList[i].bitmapData.PixelWidth;
@@ -108,10 +110,19 @@ namespace SpritePacker.Model
             int iTotalHeight = 0;
 
             // Get the biggest height
-            for (int i = 1; i < SubspriteList.Count - 1; i++)
+
+            // edge case of one image
+            if (SubspriteList.Count == 1)
             {
-                iTotalHeight = Math.Max(SubspriteList[i - 1].bitmapData.PixelHeight,
-                                        SubspriteList[i].bitmapData.PixelHeight);
+                iTotalHeight = SubspriteList[0].bitmapData.PixelHeight;
+            }
+            else
+            {
+                for (int i = 1; i < SubspriteList.Count - 1; i++)
+                {
+                    iTotalHeight = Math.Max(SubspriteList[i - 1].bitmapData.PixelHeight,
+                                            SubspriteList[i].bitmapData.PixelHeight);
+                }
             }
 
             // Add offset of all subsprites going down
@@ -148,6 +159,9 @@ namespace SpritePacker.Model
                         }
                 }
             }
+
+            Debug.Assert(AtlasDims.X != 0 &&
+                         AtlasDims.Y != 0);
 
             return AtlasDims;
         }
