@@ -14,6 +14,8 @@ using System.IO;
 
 using System.Diagnostics;           // Assert
 
+using System.Xml.Linq;              // XDocument
+
 namespace SpritePacker.Model
 {
     class Packer : INotifyPropertyChanged
@@ -85,7 +87,6 @@ namespace SpritePacker.Model
         }
 
         // = Functions =
-
         /// <summary>
         /// Calculates the target size of the atlas
         /// </summary>
@@ -167,10 +168,9 @@ namespace SpritePacker.Model
         }
 
         /// <summary>
-        /// Build sprite atlas from list of subsprites
+        /// Sort the subsprites using the current algo
         /// </summary>
-        /// <returns>Returns sprite atlas as image</returns>
-        public BitmapImage BuildAtlas()
+        public void SortSubsprites()
         {
             // Determine atlas target resolution
             targetDims = calculateAtlasDims();
@@ -192,10 +192,80 @@ namespace SpritePacker.Model
                     }
             }
 
-            // Sort the Subsprites & Store the Returned Value
-            Atlas = sorter(SubspriteList);
+            // Sort the Subsprites
+            sorter(SubspriteList);
+        }
 
-            // Return the stored value
+        /// <summary>
+        /// Saves current result of sorting to filesystem
+        /// </summary>
+        /// <returns>Sorted sprite atlas</returns>
+        public BitmapImage BuildAtlas()
+        {
+            BitmapImage imageResult;
+
+            BitmapFrame[] frames = new BitmapFrame[SubspriteList.Count];
+
+            for (int i = 0; i < SubspriteList.Count; i++)
+            {
+                // create bitmap frames
+                frames[i] = BitmapDecoder.Create(SubspriteList[i].bitmapData.UriSource,
+                                                 BitmapCreateOptions.DelayCreation,
+                                                 BitmapCacheOption.OnLoad).Frames.First();
+            }
+
+            // Create the drawing visual
+            DrawingVisual drawingVisual = new DrawingVisual();
+
+            // Draw into it
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                for (int i = 0; i < frames.Length; i++)
+                {
+                    drawingContext.DrawImage(frames[i], new Rect((Point)SubspriteList[i].Pos, SubspriteList[i].Dims));
+                }
+            }
+
+            // Convert DrawingVisual into a BitmapSource
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)targetDims.X, (int)targetDims.Y, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(drawingVisual);
+            bmp.Freeze();   // finalize the image
+
+            PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
+            pngEncoder.Frames.Add(BitmapFrame.Create(bmp));
+
+            // Stuff BitmapSource into encoder
+            //ImageIO imageIOHandler = new ImageIO();
+
+            // Get working directory
+            string cd = Directory.GetCurrentDirectory();
+
+            // Save to temporary file
+            using (Stream stream = File.Create(cd + @"\temp.png"))
+            {
+                pngEncoder.Save(stream);
+                stream.Close();
+            }
+
+            try
+            {
+                Uri tempPath = new Uri(cd + "\\temp.png");
+                imageResult = new BitmapImage(tempPath);
+            }
+            catch (System.ArgumentNullException)
+            {
+                throw new Exception();
+            }
+            catch (System.UriFormatException)
+            {
+                throw new Exception();
+            }
+
+            // Record resulting bitmap into imageResult
+            Atlas = imageResult;
+
+
+            // Return it too
             return Atlas;
         }
 
@@ -224,76 +294,19 @@ namespace SpritePacker.Model
             throw new NotImplementedException();
         }
 
-        private delegate BitmapImage SubspriteSorter(List<Subsprite> subsprites);
-        private BitmapImage stripSorter(List<Subsprite> subsprites)
+        private delegate void SubspriteSorter(List<Subsprite> subsprites);
+        private void stripSorter(List<Subsprite> subsprites)
         {
-            BitmapImage imageResult;
-
-            BitmapFrame[] frames = new BitmapFrame[SubspriteList.Count];
-
+            // Value to offset by
+            int prevFrames = 0;
             for (int i = 0; i < SubspriteList.Count; i++)
             {
-                // create bitmap frames
-                frames[i] = BitmapDecoder.Create(SubspriteList[i].bitmapData.UriSource,
-                                                 BitmapCreateOptions.DelayCreation,
-                                                 BitmapCacheOption.OnLoad).Frames.First();
+                // Write position to Subsprite
+                SubspriteList[i].Pos = new Vector(prevFrames, 0);
+
+                // Offset the next image
+                prevFrames += SubspriteList[i].bitmapData.PixelWidth;
             }
-
-            // Create the drawing visual
-            DrawingVisual drawingVisual = new DrawingVisual();
-
-            // Draw into it
-            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
-            {
-                int prevFrames = 0;
-                for (int i = 0; i < frames.Length; i++)
-                {
-                    drawingContext.DrawImage(frames[i], new Rect(prevFrames, 0, frames[i].PixelWidth, frames[i].PixelHeight));
-
-                    // Write position to Subsprite
-                    SubspriteList[i].Pos = new Vector(prevFrames, 0);
-
-                    prevFrames += frames[i].PixelWidth;
-                }
-            }
-
-            // Convert DrawingVisual into a BitmapSource
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)targetDims.X, (int)targetDims.Y, 96, 96, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);
-            bmp.Freeze();   // finalize the image
-
-            PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
-            pngEncoder.Frames.Add(BitmapFrame.Create(bmp));
-
-            // Stuff BitmapSource into encoder
-            ImageIO imageIOHandler = new ImageIO();
-
-            // Get working directory
-            string cd = Directory.GetCurrentDirectory();
-
-            // Save to temporary file
-            using (Stream stream = File.Create(cd + @"\temp.bmp"))
-            {
-                pngEncoder.Save(stream);
-                stream.Close();
-            }
-
-            try
-            {
-                Uri tempPath = new Uri(cd + "\\temp.bmp");
-                imageResult = new BitmapImage(tempPath);
-            }
-            catch (System.ArgumentNullException)
-            {
-                throw new Exception();
-            }
-            catch (System.UriFormatException)
-            {
-                throw new Exception();
-            }
-
-            // Record resulting bitmap into imageResult
-            return imageResult;
         }
     }
 }

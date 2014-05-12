@@ -107,7 +107,8 @@ namespace SpritePacker.Viewmodel
                     Packer.SubspriteList.Last().DeriveNameFromSource();
                 }
 
-                // FOR DEBUGGING ONLY, GET RID OF THIS
+                // FOR DEBUGGING ONLY, GET RID OF THESE
+                Packer.SortSubsprites();
                 Packer.BuildAtlas();
             }
 

@@ -92,11 +92,11 @@ namespace SpritePacker.Model
 
         // origin is top left
         public Vector Pos;
-        public Vector Dims
+        public Size Dims
         {
             get
             {
-                return new Vector(bitmapData.PixelWidth, bitmapData.PixelHeight);
+                return new Size(bitmapData.PixelWidth, bitmapData.PixelHeight);
             }
             private set
             {
