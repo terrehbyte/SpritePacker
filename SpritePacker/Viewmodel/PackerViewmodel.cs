@@ -105,8 +105,10 @@ namespace SpritePacker.Viewmodel
 
                 for (int i = 0; i < selectedSubs.Length; i++)
                 {
-                    Packer.AddSubsprite(new Subsprite(selectedSubs[i]));
-                    Packer.SubspriteList.Last().DeriveNameFromSource();
+                    Subsprite tempSub = new Subsprite(selectedSubs[i]);
+                    tempSub.DeriveNameFromSource();
+
+                    Packer.AddSubsprite(tempSub);
                 }
             }
 
@@ -118,6 +120,7 @@ namespace SpritePacker.Viewmodel
         }
         public void RemoveSubsprite()
         {
+            // dependant on being able to select objects from listbox
             throw new NotImplementedException();
         }
         public void PreviewAtlas()
@@ -128,19 +131,18 @@ namespace SpritePacker.Viewmodel
         }
         public void ExportAtlas()
         {
-            
-            
-            
-
             // prompt for save
             ImageIO imageHandler = new ImageIO();
 
+            // create save dialog
             Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
             saveDiag.FileName = "atlas.png";
             saveDiag.AddExtension = true;
             saveDiag.Filter = ImageIO.BuildFilterStr("p");
 
             Nullable<bool> diagResult = saveDiag.ShowDialog();
+
+            // User selected a save location
             if (diagResult == true)
             {
                 // Save BitmapImage
@@ -155,14 +157,11 @@ namespace SpritePacker.Viewmodel
                 Packer.AtlasXML.Save(xmlStream);
                 xmlStream.Close();
             }
+            // User did not select a save location
             else
             {
                 return;
             }
-
-
-
-            //throw new NotImplementedException();
         }
     }
 }

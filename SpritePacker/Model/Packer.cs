@@ -303,26 +303,8 @@ namespace SpritePacker.Model
             // Create Doc
             XDocument XMLdoc = new XDocument(XMLdec, XMLRootNode);
 
+            // Record doc
             AtlasXML = XMLdoc;
-
-            /*
-
-            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
-            Nullable<bool> diagResult = saveDiag.ShowDialog();
-
-            // user selected something
-            if (diagResult == true)
-            {
-                // Open file stream
-                FileStream xmlStream = new FileStream(saveDiag.FileName, FileMode.Create);
-                XMLdoc.Save(xmlStream);
-                xmlStream.Close();
-            }
-            else
-            {
-                return;
-            }
-            */
         }
 
         /// <summary>
