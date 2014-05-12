@@ -54,7 +54,7 @@
                     <ComboBoxItem Content="Test A"></ComboBoxItem>
                     <ComboBoxItem Content="Test B"></ComboBoxItem>
                 </ComboBox>
-                <CheckBox>Power of Two</CheckBox>
+                <CheckBox Content="Power of Two" IsChecked="{Binding Packer.PowerOfTwo}"></CheckBox>
 
                 <StackPanel Orientation="Horizontal">
                     <TextBox Name="OffsetValue" Text="{Binding Packer.OffsetValue, UpdateSourceTrigger=PropertyChanged}"></TextBox>
@@ -65,10 +65,14 @@
                     <Button Content="Preview" HorizontalAlignment="Center" Command="{Binding PreviewCommand}"></Button>
                     <Button Content="Export" HorizontalAlignment="Center" Command="{Binding ExportCommand}"></Button>
                 </StackPanel>
-            </StackPanel> 
-            <ScrollViewer Grid.Column="2"></ScrollViewer>
-            
+            </StackPanel>
+
             <!--Right Panel-->
+            <ScrollViewer Grid.Column="2">
+                <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding Packer.Atlas, UpdateSourceTrigger=PropertyChanged}"></Canvas>
+            </ScrollViewer>
+            
+            
             <GridSplitter HorizontalAlignment="Right"
                           VerticalAlignment="Stretch"
                           Grid.Column="1" ResizeBehavior="PreviousAndNext"
@@ -77,7 +81,7 @@
         
         <!--Status Bar-->
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <TextBlock Text="{Binding Packer.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Text="{Binding Packer.PowerOfTwo, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StatusBar>
     </Grid>
 </Window>

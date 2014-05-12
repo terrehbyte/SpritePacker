@@ -46,10 +46,22 @@ namespace SpritePacker.Model
             }
             private set
             {
-
+                OnPropertyChanged("Atlas");
             }
         }
-        public XDocument AtlasXML;
+        private XDocument _atlasXML;
+        public XDocument AtlasXML
+        {
+            get
+            {
+                return _atlasXML;
+            }
+            set
+            {
+                _atlasXML = value;
+                OnPropertyChanged("AtlasXML");
+            }
+        }
         private Vector targetDims;  // x and y correspond to atlas width and height
         public  List<Subsprite> SubspriteList = new List<Subsprite>();  // list of subsprites
         
@@ -167,7 +179,23 @@ namespace SpritePacker.Model
                 int iAtlasArea = iTotalHeight * iTotalWidth;
 
                 // Square the area to get the length for the sides
-                double iTotalRooted = Math.Sqrt((double)iAtlasArea);
+                int iTotalRooted = (int)Math.Sqrt((double)iAtlasArea);
+
+                bool isPowTwo = false;
+
+                // checks for pow of two
+                isPowTwo = (iTotalRooted & (iTotalRooted - 1)) == 0;
+
+                if (!isPowTwo)
+                {
+                    iTotalRooted--;
+                    iTotalRooted |= iTotalRooted >> 1;
+                    iTotalRooted |= iTotalRooted >> 2;
+                    iTotalRooted |= iTotalRooted >> 4;
+                    iTotalRooted |= iTotalRooted >> 8;
+                    iTotalRooted |= iTotalRooted >> 16;
+                    iTotalRooted++;
+                }
 
                 AtlasDims = new Vector(iTotalRooted, iTotalRooted);
             }
@@ -259,6 +287,7 @@ namespace SpritePacker.Model
 
             // store internally
             _atlas = bmp;
+            Atlas = Atlas;
 
             // Return it too
             return Atlas;
@@ -329,14 +358,36 @@ namespace SpritePacker.Model
         private void stripSorter(List<Subsprite> subsprites)
         {
             // Value to offset by
-            int offset = 0;
+            int xOffset = 0;
+            int yOffset = 0;
+
+            int bigHeight = 0;
+
             for (int i = 0; i < SubspriteList.Count; i++)
             {
+                // Store current subsprite
+                Subsprite curSub = SubspriteList[i];
+
+                // Wrap when necessary
+                if (xOffset + curSub.Dims.Width > targetDims.X)
+                {
+                    xOffset = 0;
+                    yOffset += bigHeight;
+
+                    // reset bigHeight
+                    bigHeight = 0;
+                }
+
                 // Write position to Subsprite
-                SubspriteList[i].Pos = new Vector(offset, 0);
+                SubspriteList[i].Pos = new Vector(xOffset, yOffset);
 
                 // Cumulative offset
-                offset += SubspriteList[i].bitmapData.PixelWidth;
+                xOffset += SubspriteList[i].bitmapData.PixelWidth;
+
+                if ((int)SubspriteList[i].Dims.Height > bigHeight)
+                {
+                    bigHeight = (int)curSub.Dims.Height;
+                }
             }
         }
         #endregion

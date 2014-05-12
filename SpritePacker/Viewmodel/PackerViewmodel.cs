@@ -8,10 +8,14 @@ using System.Windows.Input; // ICommand
 using SpritePacker.Model;   // SpritePacker
 
 using System.IO;            // FileStream
+using System.Windows;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;            
 
 namespace SpritePacker.Viewmodel
 {
-    internal class PackerViewmodel
+    internal class PackerViewmodel : INotifyPropertyChanged
     {
         public PackerViewmodel(Packer packer)
         {
@@ -91,12 +95,14 @@ namespace SpritePacker.Viewmodel
             }
         }
 
+        // Bindable Collections
+
         // Internal Calls to Model
         public void AddSubsprite()
         {
             ImageIO imgIO = new ImageIO();
 
-            imgIO.OpenDiag.Filter = ImageIO.BuildFilterStr("pjb");
+            imgIO.OpenDiag.Filter = "Image Files (.png, .jpg, .bmp)|*.png;*.jpg;*.bmp";
             imgIO.OpenDiag.Multiselect = true;
 
             if (imgIO.CreateOpenDialog() != null)
@@ -127,7 +133,6 @@ namespace SpritePacker.Viewmodel
         {
             Packer.SortSubsprites();
             Packer.BuildAtlas();
-            Packer.BuildXML();
         }
         public void ExportAtlas()
         {
@@ -161,6 +166,17 @@ namespace SpritePacker.Viewmodel
             else
             {
                 return;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
