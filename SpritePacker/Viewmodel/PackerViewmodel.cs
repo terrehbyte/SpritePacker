@@ -109,6 +109,7 @@ namespace SpritePacker.Viewmodel
 
                 // FOR DEBUGGING ONLY, GET RID OF THESE
                 Packer.SortSubsprites();
+                Packer.BuildXML();
                 Packer.BuildAtlas();
             }
 

@@ -22,6 +22,7 @@ namespace SpritePacker.Model
     {
         // = Data Stores =
         public BitmapImage Atlas;   // cached atlas
+        public XDocument AtlasXML;
         private Vector targetDims;  // x and y correspond to atlas width and height
         public  List<Subsprite> SubspriteList = new List<Subsprite>();  // list of subsprites
         
@@ -291,7 +292,57 @@ namespace SpritePacker.Model
         /// </summary>
         public void BuildXML()
         {
-            throw new NotImplementedException();
+            // CREATE DOC
+
+            // Create Declaration - this will be hard coded for now
+            XDeclaration XMLdec = new XDeclaration("1.0", "utf-8", "yes");
+
+            // Populate with subsprites
+            Object[] XMLelem = new Object[SubspriteList.Count];
+
+            for (int i = 0; i < SubspriteList.Count; i++)
+            {
+                // Create the subsprite
+                XElement node = new XElement("SubTexture");
+                
+                // Cache this shit so I don't have to type it every time
+                Subsprite curSub = SubspriteList[i];
+
+                // Add the attributes of the subsprite
+                node.SetAttributeValue("name", curSub.Name);
+                node.SetAttributeValue("x", curSub.Pos.X);
+                node.SetAttributeValue("y", curSub.Pos.Y);
+                node.SetAttributeValue("width", curSub.Dims.Width);
+                node.SetAttributeValue("height", curSub.Dims.Height);
+
+                // Stuff shit into array
+                XMLelem[i] = node;
+            }
+
+            XElement XMLRootNode = new XElement("TextureAtlas", XMLelem);  // nest the subsprites
+            XMLRootNode.SetAttributeValue("imagePath", "CHANGEMETERRY GOD DAMN IT");   // this will come after
+
+            // Create Doc
+            XDocument XMLdoc = new XDocument(XMLdec, XMLRootNode);
+
+            AtlasXML = XMLdoc;
+
+            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
+            Nullable<bool> diagResult = saveDiag.ShowDialog();
+            
+            // user selected something
+            if (diagResult == true)
+            {
+                // Open file stream
+                FileStream xmlStream = new FileStream(saveDiag.FileName, FileMode.Create);
+                XMLdoc.Save(xmlStream);
+                xmlStream.Close();
+            }
+            else
+            {
+                return;
+            }
+
         }
 
         private delegate void SubspriteSorter(List<Subsprite> subsprites);
