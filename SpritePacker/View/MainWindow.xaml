@@ -57,7 +57,7 @@
                 <CheckBox Content="Power of Two" IsChecked="{Binding Packer.PowerOfTwo}"></CheckBox>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBox Name="OffsetValue" Text="{Binding Packer.OffsetValue, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox Name="OffsetValue" Text="{Binding Packer.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
                 </StackPanel>
 

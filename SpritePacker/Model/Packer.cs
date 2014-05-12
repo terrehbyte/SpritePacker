@@ -144,7 +144,7 @@ namespace SpritePacker.Model
                 // Add each individual subsprite's width
                 iTotalWidth += SubspriteList[i].bitmapData.PixelWidth;
 
-                // Add the offset between each sprite
+                // Add the pixel offset between each sprite
                 iTotalWidth += Offset;
             }
 
@@ -166,15 +166,15 @@ namespace SpritePacker.Model
                 }
             }
 
-            // Add offset of all subsprites going down
-            iTotalHeight += SubspriteList.Count * Offset;
-
             // @terrehbyte: When should the offset be added in?
             //              We'll do it here for now, but figure out
             //              where it should go in the process...
 
             if (PowerOfTwo)
             {
+                // Add offset of sprite going down
+                iTotalHeight += Offset;
+
                 // Get the area
                 int iAtlasArea = iTotalHeight * iTotalWidth;
 
@@ -382,12 +382,14 @@ namespace SpritePacker.Model
                 SubspriteList[i].Pos = new Vector(xOffset, yOffset);
 
                 // Cumulative offset
-                xOffset += SubspriteList[i].bitmapData.PixelWidth;
+                xOffset += SubspriteList[i].bitmapData.PixelWidth + Offset;
 
-                if ((int)SubspriteList[i].Dims.Height > bigHeight)
+                if ((int)SubspriteList[i].Dims.Height + Offset > bigHeight)
                 {
-                    bigHeight = (int)curSub.Dims.Height;
+                    bigHeight = (int)curSub.Dims.Height + Offset;
                 }
+
+                Debug.Assert(yOffset < targetDims.Y);
             }
         }
         #endregion
