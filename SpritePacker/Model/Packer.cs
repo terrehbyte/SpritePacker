@@ -21,7 +21,34 @@ namespace SpritePacker.Model
     class Packer : INotifyPropertyChanged
     {
         // = Data Stores =
-        public BitmapImage Atlas;   // cached atlas
+        private RenderTargetBitmap _atlas;
+        public BitmapImage Atlas
+        {
+            get
+            {
+                BitmapImage atlasImg = new BitmapImage();
+
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(_atlas));
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    atlasImg.BeginInit();
+                    atlasImg.CacheOption = BitmapCacheOption.OnLoad;
+                    atlasImg.StreamSource = stream;
+                    atlasImg.EndInit();
+                }
+
+                return atlasImg;
+            }
+            private set
+            {
+
+            }
+        }
         public XDocument AtlasXML;
         private Vector targetDims;  // x and y correspond to atlas width and height
         public  List<Subsprite> SubspriteList = new List<Subsprite>();  // list of subsprites
@@ -203,8 +230,6 @@ namespace SpritePacker.Model
         /// <returns>Sorted sprite atlas</returns>
         public BitmapImage BuildAtlas()
         {
-            BitmapImage imageResult;
-
             BitmapFrame[] frames = new BitmapFrame[SubspriteList.Count];
 
             for (int i = 0; i < SubspriteList.Count; i++)
@@ -232,42 +257,67 @@ namespace SpritePacker.Model
             bmp.Render(drawingVisual);
             bmp.Freeze();   // finalize the image
 
-            PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
-            pngEncoder.Frames.Add(BitmapFrame.Create(bmp));
-
-            // Stuff BitmapSource into encoder
-            //ImageIO imageIOHandler = new ImageIO();
-
-            // Get working directory
-            string cd = Directory.GetCurrentDirectory();
-
-            // Save to temporary file
-            using (Stream stream = File.Create(cd + @"\temp.png"))
-            {
-                pngEncoder.Save(stream);
-                stream.Close();
-            }
-
-            try
-            {
-                Uri tempPath = new Uri(cd + "\\temp.png");
-                imageResult = new BitmapImage(tempPath);
-            }
-            catch (System.ArgumentNullException)
-            {
-                throw new Exception();
-            }
-            catch (System.UriFormatException)
-            {
-                throw new Exception();
-            }
-
-            // Record resulting bitmap into imageResult
-            Atlas = imageResult;
-
+            // store internally
+            _atlas = bmp;
 
             // Return it too
             return Atlas;
+        }
+        /// <summary>
+        /// Builds the XML document of the atlas
+        /// </summary>
+        public void BuildXML()
+        {
+            // Populate with subsprites
+            Object[] XMLelem = new Object[SubspriteList.Count];
+            for (int i = 0; i < SubspriteList.Count; i++)
+            {
+                // Create the subsprite
+                XElement node = new XElement("SubTexture");
+
+                // Cache this shit so I don't have to type it every time
+                Subsprite curSub = SubspriteList[i];
+
+                // Add the attributes of the subsprite
+                node.SetAttributeValue("name", curSub.Name);
+                node.SetAttributeValue("x", curSub.Pos.X);
+                node.SetAttributeValue("y", curSub.Pos.Y);
+                node.SetAttributeValue("width", curSub.Dims.Width);
+                node.SetAttributeValue("height", curSub.Dims.Height);
+
+                // Stuff shit into array
+                XMLelem[i] = node;
+            }
+
+            XElement XMLRootNode = new XElement("TextureAtlas", XMLelem);  // nest the subsprites
+            XMLRootNode.SetAttributeValue("imagePath", "CHANGEMETERRY GOD DAMN IT");   // this will come after
+
+            // Create Declaration - this will be hard coded for now
+            XDeclaration XMLdec = new XDeclaration("1.0", "utf-8", "yes");
+
+            // Create Doc
+            XDocument XMLdoc = new XDocument(XMLdec, XMLRootNode);
+
+            AtlasXML = XMLdoc;
+
+            /*
+
+            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
+            Nullable<bool> diagResult = saveDiag.ShowDialog();
+
+            // user selected something
+            if (diagResult == true)
+            {
+                // Open file stream
+                FileStream xmlStream = new FileStream(saveDiag.FileName, FileMode.Create);
+                XMLdoc.Save(xmlStream);
+                xmlStream.Close();
+            }
+            else
+            {
+                return;
+            }
+            */
         }
 
         /// <summary>
@@ -287,77 +337,21 @@ namespace SpritePacker.Model
             SubspriteList.Remove(removeSub);
         }
 
-        /// <summary>
-        /// Builds the XML document of the atlas
-        /// </summary>
-        public void BuildXML()
-        {
-            // CREATE DOC
-
-            // Create Declaration - this will be hard coded for now
-            XDeclaration XMLdec = new XDeclaration("1.0", "utf-8", "yes");
-
-            // Populate with subsprites
-            Object[] XMLelem = new Object[SubspriteList.Count];
-
-            for (int i = 0; i < SubspriteList.Count; i++)
-            {
-                // Create the subsprite
-                XElement node = new XElement("SubTexture");
-                
-                // Cache this shit so I don't have to type it every time
-                Subsprite curSub = SubspriteList[i];
-
-                // Add the attributes of the subsprite
-                node.SetAttributeValue("name", curSub.Name);
-                node.SetAttributeValue("x", curSub.Pos.X);
-                node.SetAttributeValue("y", curSub.Pos.Y);
-                node.SetAttributeValue("width", curSub.Dims.Width);
-                node.SetAttributeValue("height", curSub.Dims.Height);
-
-                // Stuff shit into array
-                XMLelem[i] = node;
-            }
-
-            XElement XMLRootNode = new XElement("TextureAtlas", XMLelem);  // nest the subsprites
-            XMLRootNode.SetAttributeValue("imagePath", "CHANGEMETERRY GOD DAMN IT");   // this will come after
-
-            // Create Doc
-            XDocument XMLdoc = new XDocument(XMLdec, XMLRootNode);
-
-            AtlasXML = XMLdoc;
-
-            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
-            Nullable<bool> diagResult = saveDiag.ShowDialog();
-            
-            // user selected something
-            if (diagResult == true)
-            {
-                // Open file stream
-                FileStream xmlStream = new FileStream(saveDiag.FileName, FileMode.Create);
-                XMLdoc.Save(xmlStream);
-                xmlStream.Close();
-            }
-            else
-            {
-                return;
-            }
-
-        }
-
+        #region Sorters
         private delegate void SubspriteSorter(List<Subsprite> subsprites);
         private void stripSorter(List<Subsprite> subsprites)
         {
             // Value to offset by
-            int prevFrames = 0;
+            int offset = 0;
             for (int i = 0; i < SubspriteList.Count; i++)
             {
                 // Write position to Subsprite
-                SubspriteList[i].Pos = new Vector(prevFrames, 0);
+                SubspriteList[i].Pos = new Vector(offset, 0);
 
-                // Offset the next image
-                prevFrames += SubspriteList[i].bitmapData.PixelWidth;
+                // Cumulative offset
+                offset += SubspriteList[i].bitmapData.PixelWidth;
             }
         }
+        #endregion
     }
 }

@@ -7,6 +7,8 @@ using System.Windows.Input; // ICommand
 
 using SpritePacker.Model;   // SpritePacker
 
+using System.IO;            // FileStream
+
 namespace SpritePacker.Viewmodel
 {
     internal class PackerViewmodel
@@ -106,11 +108,6 @@ namespace SpritePacker.Viewmodel
                     Packer.AddSubsprite(new Subsprite(selectedSubs[i]));
                     Packer.SubspriteList.Last().DeriveNameFromSource();
                 }
-
-                // FOR DEBUGGING ONLY, GET RID OF THESE
-                Packer.SortSubsprites();
-                Packer.BuildXML();
-                Packer.BuildAtlas();
             }
 
             // User didn't select anything, just stop
@@ -125,11 +122,44 @@ namespace SpritePacker.Viewmodel
         }
         public void PreviewAtlas()
         {
-            throw new NotImplementedException();
+            Packer.SortSubsprites();
+            Packer.BuildAtlas();
+            Packer.BuildXML();
         }
         public void ExportAtlas()
         {
-            throw new NotImplementedException();
+            Packer.SortSubsprites();
+            Packer.BuildAtlas();
+            Packer.BuildXML();
+
+            // prompt for save
+            ImageIO imageHandler = new ImageIO();
+
+            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
+            saveDiag.FileName = "atlas.png";
+            saveDiag.AddExtension = true;
+            saveDiag.Filter = ImageIO.BuildFilterStr("p");
+
+            Nullable<bool> diagResult = saveDiag.ShowDialog();
+            if (diagResult == true)
+            {
+                // Save BitmapImage
+                ImageIO.Save(Packer.Atlas, saveDiag.FileName);
+
+                // Save XML
+                string xmlSavepath = Path.ChangeExtension(saveDiag.FileName, ".xml");
+                FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
+                Packer.AtlasXML.Save(xmlStream);
+                xmlStream.Close();
+            }
+            else
+            {
+                return;
+            }
+
+
+
+            //throw new NotImplementedException();
         }
     }
 }
