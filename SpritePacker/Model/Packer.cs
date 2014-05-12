@@ -266,8 +266,13 @@ namespace SpritePacker.Model
         /// <summary>
         /// Builds the XML document of the atlas
         /// </summary>
-        public void BuildXML()
+        public void BuildXML(string imagePath=null)
         {
+            if (imagePath == null)
+            {
+                imagePath = "";
+            }
+
             // Populate with subsprites
             Object[] XMLelem = new Object[SubspriteList.Count];
             for (int i = 0; i < SubspriteList.Count; i++)
@@ -290,7 +295,7 @@ namespace SpritePacker.Model
             }
 
             XElement XMLRootNode = new XElement("TextureAtlas", XMLelem);  // nest the subsprites
-            XMLRootNode.SetAttributeValue("imagePath", "CHANGEMETERRY GOD DAMN IT");   // this will come after
+            XMLRootNode.SetAttributeValue("imagePath", imagePath);   // this will come after
 
             // Create Declaration - this will be hard coded for now
             XDeclaration XMLdec = new XDeclaration("1.0", "utf-8", "yes");

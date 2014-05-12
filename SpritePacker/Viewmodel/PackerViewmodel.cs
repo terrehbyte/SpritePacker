@@ -128,9 +128,9 @@ namespace SpritePacker.Viewmodel
         }
         public void ExportAtlas()
         {
-            Packer.SortSubsprites();
-            Packer.BuildAtlas();
-            Packer.BuildXML();
+            
+            
+            
 
             // prompt for save
             ImageIO imageHandler = new ImageIO();
@@ -144,9 +144,12 @@ namespace SpritePacker.Viewmodel
             if (diagResult == true)
             {
                 // Save BitmapImage
+                Packer.SortSubsprites();
+                Packer.BuildAtlas();
                 ImageIO.Save(Packer.Atlas, saveDiag.FileName);
 
                 // Save XML
+                Packer.BuildXML(saveDiag.SafeFileName);
                 string xmlSavepath = Path.ChangeExtension(saveDiag.FileName, ".xml");
                 FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
                 Packer.AtlasXML.Save(xmlStream);
