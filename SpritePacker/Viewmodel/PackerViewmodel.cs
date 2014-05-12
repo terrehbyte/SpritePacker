@@ -104,13 +104,14 @@ namespace SpritePacker.Viewmodel
                 for (int i = 0; i < selectedSubs.Length; i++)
                 {
                     Packer.AddSubsprite(new Subsprite(selectedSubs[i]));
+                    Packer.SubspriteList.Last().DeriveNameFromSource();
                 }
 
-                int Dummy;
+                // FOR DEBUGGING ONLY, GET RID OF THIS
                 Packer.BuildAtlas();
             }
 
-            
+            // User didn't select anything, just stop
             else
             {
                 return;

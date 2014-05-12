@@ -216,6 +216,14 @@ namespace SpritePacker.Model
             SubspriteList.Remove(removeSub);
         }
 
+        /// <summary>
+        /// Builds the XML document of the atlas
+        /// </summary>
+        public void BuildXML()
+        {
+            throw new NotImplementedException();
+        }
+
         private delegate BitmapImage SubspriteSorter(List<Subsprite> subsprites);
         private BitmapImage stripSorter(List<Subsprite> subsprites)
         {
@@ -241,6 +249,10 @@ namespace SpritePacker.Model
                 for (int i = 0; i < frames.Length; i++)
                 {
                     drawingContext.DrawImage(frames[i], new Rect(prevFrames, 0, frames[i].PixelWidth, frames[i].PixelHeight));
+
+                    // Write position to Subsprite
+                    SubspriteList[i].Pos = new Vector(prevFrames, 0);
+
                     prevFrames += frames[i].PixelWidth;
                 }
             }
@@ -273,11 +285,11 @@ namespace SpritePacker.Model
             }
             catch (System.ArgumentNullException)
             {
-                return null;
+                throw new Exception();
             }
             catch (System.UriFormatException)
             {
-                return null;
+                throw new Exception();
             }
 
             // Record resulting bitmap into imageResult
