@@ -20,7 +20,7 @@ namespace SpritePacker.Viewmodel
         public PackerViewmodel(Packer packer)
         {
             // Record reference to packer
-            Packer = packer;
+            PackerMan = packer;
 
             // Assign ICommand
             AddCommand      = new PackerAddCom(this);
@@ -52,16 +52,16 @@ namespace SpritePacker.Viewmodel
         }
 
         // References to sprite Packer
-        private Packer _packer;
-        public Packer Packer
+        private Packer _packerMan;
+        public Packer PackerMan
         {
             get
             {
-                return _packer;
+                return _packerMan;
             }
             set
             {
-                _packer = value;
+                _packerMan = value;
             }
         }
 
@@ -70,32 +70,33 @@ namespace SpritePacker.Viewmodel
         {
             get
             {
-                return (Packer.SubspriteList != null);
+                return (PackerMan.SubspriteList != null);
             }
         }
         public bool CanRemove
         {
             get
             {
-                return (Packer.SubspriteList.Count > 0);
+                return (PackerMan.SubspriteList.Count > 0);
             }
         }
         public bool CanPreview
         {
             get
             {
-                return (Packer.SubspriteList.Count > 0);
+                return (PackerMan.SubspriteList.Count > 0);
             }
         }
         public bool CanExport
         {
             get
             {
-                return (Packer.SubspriteList.Count > 0);
+                return (PackerMan.SubspriteList.Count > 0);
             }
         }
 
         // Bindable Collections
+        public ObservableCollection<List<Subsprite>> SubspriteList;
 
         // Internal Calls to Model
         public void AddSubsprite()
@@ -114,7 +115,7 @@ namespace SpritePacker.Viewmodel
                     Subsprite tempSub = new Subsprite(selectedSubs[i]);
                     tempSub.DeriveNameFromSource();
 
-                    Packer.AddSubsprite(tempSub);
+                    PackerMan.AddSubsprite(tempSub);
                 }
             }
 
@@ -131,8 +132,8 @@ namespace SpritePacker.Viewmodel
         }
         public void PreviewAtlas()
         {
-            Packer.SortSubsprites();
-            Packer.BuildAtlas();
+            PackerMan.SortSubsprites();
+            PackerMan.BuildAtlas();
         }
         public void ExportAtlas()
         {
@@ -151,15 +152,15 @@ namespace SpritePacker.Viewmodel
             if (diagResult == true)
             {
                 // Save BitmapImage
-                Packer.SortSubsprites();
-                Packer.BuildAtlas();
-                ImageIO.Save(Packer.Atlas, saveDiag.FileName);
+                PackerMan.SortSubsprites();
+                PackerMan.BuildAtlas();
+                ImageIO.Save(PackerMan.Atlas, saveDiag.FileName);
 
                 // Save XML
-                Packer.BuildXML(saveDiag.SafeFileName);
+                PackerMan.BuildXML(saveDiag.SafeFileName);
                 string xmlSavepath = Path.ChangeExtension(saveDiag.FileName, ".xml");
                 FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
-                Packer.AtlasXML.Save(xmlStream);
+                PackerMan.AtlasXML.Save(xmlStream);
                 xmlStream.Close();
             }
             // User did not select a save location

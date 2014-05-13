@@ -111,7 +111,7 @@ namespace SpritePacker.Model
 
         public enum SortingAlgos        // different sorting algorithms
         {
-            Strip
+            STRIP
         };
 
         // = Events =
@@ -204,7 +204,7 @@ namespace SpritePacker.Model
                 switch (DesiredSort)
                 {
                     // Strip Atlas
-                    case (SortingAlgos.Strip):
+                    case (SortingAlgos.STRIP):
                         {
                             AtlasDims = new Vector((double)iTotalWidth, (double)iTotalHeight);
                             break;
@@ -237,7 +237,7 @@ namespace SpritePacker.Model
             // assign it the proper algorithm's function
             switch (DesiredSort)
             {
-                case (SortingAlgos.Strip):
+                case (SortingAlgos.STRIP):
                     {
                         sorter = stripSorter;
                         break;
