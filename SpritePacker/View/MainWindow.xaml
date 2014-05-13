@@ -50,10 +50,11 @@
                     <Button HorizontalAlignment="Center" Command="{Binding AddCommand}">Add</Button>
                     <Button HorizontalAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
                 </StackPanel>
-                <ComboBox>
-                    <ComboBoxItem Content="Test A"></ComboBoxItem>
-                    <ComboBoxItem Content="Test B"></ComboBoxItem>
-                </ComboBox>
+                
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Name="AlgoCombobox" ItemsSource="{Binding SortAlgoEnum}" SelectedValue="{Binding PackerMan.DesiredSort}"/>
+                    <Label Content="Sort Method" HorizontalAlignment="Left" Target="{Binding AlgoCombobox}"></Label>
+                </StackPanel>
                 <CheckBox Content="Power of Two" IsChecked="{Binding PackerMan.PowerOfTwo}"></CheckBox>
 
                 <StackPanel Orientation="Horizontal">
@@ -81,7 +82,7 @@
         
         <!--Status Bar-->
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <TextBlock Text="{Binding PackerMan.PowerOfTwo, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Text="{Binding PackerMan.DesiredSort, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StatusBar>
     </Grid>
 </Window>

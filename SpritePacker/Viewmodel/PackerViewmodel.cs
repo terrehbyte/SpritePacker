@@ -85,6 +85,12 @@ namespace SpritePacker.Viewmodel
             }
         }
 
+        public IEnumerable<string> SortAlgoEnum
+        {
+            get;
+            set;
+        }
+
         // Bindable Collections
         private ObservableCollection<Subsprite> _subspriteList;
         public ObservableCollection<Subsprite> SubspriteList
@@ -106,9 +112,9 @@ namespace SpritePacker.Viewmodel
         }
 
         /// <summary>
-        /// Constructs
+        /// Constructs the packer view model
         /// </summary>
-        /// <param name="packer"></param>
+        /// <param name="packer">Packer hidden by viewmodel</param>
         public PackerViewmodel(Packer packer)
         {
             // Record reference to packer
@@ -119,6 +125,10 @@ namespace SpritePacker.Viewmodel
             RemoveCommand = new PackerRemoveCom(this);
             ExportCommand = new PackerExportCom(this);
             PreviewCommand = new PackerPreviewCom(this);
+
+            // Initialize SortAlgoEnum
+            string[] enumNames = Enum.GetNames(typeof(SpritePacker.Model.Packer.SortingAlgos));
+            SortAlgoEnum = enumNames;
         }
 
         // Internal Calls to Model

@@ -112,7 +112,7 @@ namespace SpritePacker.Model
 
         public enum SortingAlgos        // different sorting algorithms
         {
-            STRIP
+            STRIP,
         };
 
         // = Events =
