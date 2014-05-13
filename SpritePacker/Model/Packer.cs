@@ -75,6 +75,7 @@ namespace SpritePacker.Model
             }
             set
             {
+                // must be zero or greater
                 _offset = value >= 0 ? value : 0;
                 OnPropertyChanged("Offset");
             }
@@ -297,9 +298,10 @@ namespace SpritePacker.Model
         /// </summary>
         public void BuildXML(string imagePath=null)
         {
+            // def
             if (imagePath == null)
             {
-                imagePath = "";
+                imagePath = "null";
             }
 
             // Populate with subsprites

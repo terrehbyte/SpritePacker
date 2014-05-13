@@ -13,22 +13,12 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;            
 
+// @terry - consider having the viewmodel completely wrap the model
+
 namespace SpritePacker.Viewmodel
 {
     internal class PackerViewmodel : INotifyPropertyChanged
     {
-        public PackerViewmodel(Packer packer)
-        {
-            // Record reference to packer
-            PackerMan = packer;
-
-            // Assign ICommand
-            AddCommand      = new PackerAddCom(this);
-            RemoveCommand   = new PackerRemoveCom(this);
-            ExportCommand   = new PackerExportCom(this);
-            PreviewCommand  = new PackerPreviewCom(this);
-        }
-
         // Bindable commands
         public ICommand AddCommand
         {
@@ -96,7 +86,40 @@ namespace SpritePacker.Viewmodel
         }
 
         // Bindable Collections
-        public ObservableCollection<List<Subsprite>> SubspriteList;
+        private ObservableCollection<Subsprite> _subspriteList;
+        public ObservableCollection<Subsprite> SubspriteList
+        {
+            get
+            {
+                return _subspriteList;
+            }
+            set
+            {
+                // prevent self-assignment
+                if (value == _subspriteList)
+                {
+                    return;
+                }
+                _subspriteList = value;
+                OnPropertyChanged("SubspriteList");
+            }
+        }
+
+        /// <summary>
+        /// Constructs
+        /// </summary>
+        /// <param name="packer"></param>
+        public PackerViewmodel(Packer packer)
+        {
+            // Record reference to packer
+            PackerMan = packer;
+
+            // Assign ICommand
+            AddCommand = new PackerAddCom(this);
+            RemoveCommand = new PackerRemoveCom(this);
+            ExportCommand = new PackerExportCom(this);
+            PreviewCommand = new PackerPreviewCom(this);
+        }
 
         // Internal Calls to Model
         public void AddSubsprite()
