@@ -41,11 +41,7 @@
             
             <!--Left Panel-->
             <StackPanel Grid.Column="0" Orientation="Vertical">
-                <ListBox>
-                    <ListBoxItem>URI A</ListBoxItem>
-                    <ListBoxItem>URI B</ListBoxItem>
-                    <ListBoxItem>URI C</ListBoxItem>
-                </ListBox>
+                <ListBox ItemsSource="{Binding SubspriteList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubsprite}"/>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button HorizontalAlignment="Center" Command="{Binding AddCommand}">Add</Button>
                     <Button HorizontalAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
@@ -82,7 +78,7 @@
         
         <!--Status Bar-->
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <TextBlock Text="{Binding PackerMan.DesiredSort, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Text="{Binding SelectedSubsprite.Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StatusBar>
     </Grid>
 </Window>

@@ -85,6 +85,20 @@ namespace SpritePacker.Viewmodel
             }
         }
 
+        private SubspriteViewmodel _selectedSubsprite;
+        public SubspriteViewmodel SelectedSubsprite
+        {
+            set
+            {
+                _selectedSubsprite = value;
+                OnPropertyChanged("SelectedSubsprite");
+            }
+            get
+            {
+                return _selectedSubsprite;
+            }
+        }
+
         public IEnumerable<string> SortAlgoEnum
         {
             get;
@@ -92,8 +106,8 @@ namespace SpritePacker.Viewmodel
         }
 
         // Bindable Collections
-        private ObservableCollection<Subsprite> _subspriteList;
-        public ObservableCollection<Subsprite> SubspriteList
+        private ObservableCollection<SubspriteViewmodel> _subspriteList;
+        public ObservableCollection<SubspriteViewmodel> SubspriteList
         {
             get
             {
@@ -129,6 +143,8 @@ namespace SpritePacker.Viewmodel
             // Initialize SortAlgoEnum
             string[] enumNames = Enum.GetNames(typeof(SpritePacker.Model.Packer.SortingAlgos));
             SortAlgoEnum = enumNames;
+
+            _subspriteList = new ObservableCollection<SubspriteViewmodel>();
         }
 
         // Internal Calls to Model
@@ -143,12 +159,23 @@ namespace SpritePacker.Viewmodel
             {
                 string[] selectedSubs = imgIO.OpenDiag.FileNames;
 
+                List<Subsprite> toAdd = new List<Subsprite>();
+
                 for (int i = 0; i < selectedSubs.Length; i++)
                 {
                     Subsprite tempSub = new Subsprite(selectedSubs[i]);
                     tempSub.DeriveNameFromSource();
 
-                    PackerMan.AddSubsprite(tempSub);
+                    SubspriteList.Add(new SubspriteViewmodel(tempSub));
+
+                    // Queue this to be added to the packer's list
+                    toAdd.Add(tempSub);
+                }
+
+                // add things to the packer's list
+                for (int i = 0; i < toAdd.Count; i++)
+                {
+                    PackerMan.SubspriteList.Add(toAdd[i]);
                 }
             }
 
@@ -160,8 +187,11 @@ namespace SpritePacker.Viewmodel
         }
         public void RemoveSubsprite()
         {
-            // dependant on being able to select objects from listbox
-            throw new NotImplementedException();
+            if (SelectedSubsprite != null)
+            {
+                PackerMan.SubspriteList.Remove(SelectedSubsprite.Subsprite);
+                SubspriteList.Remove(SelectedSubsprite);
+            }
         }
         public void PreviewAtlas()
         {
