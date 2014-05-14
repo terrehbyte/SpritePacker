@@ -20,6 +20,11 @@ namespace SpritePacker.Viewmodel
     internal class PackerViewmodel : INotifyPropertyChanged
     {
         // Bindable commands
+        public ICommand NewCommand
+        {
+            get;
+            private set;
+        }
         public ICommand AddCommand
         {
             get;
@@ -56,6 +61,13 @@ namespace SpritePacker.Viewmodel
         }
 
         // Properties
+        public bool CanNew
+        {
+            get
+            {
+                return true;
+            }
+        }
         public bool CanAdd
         {
             get
@@ -84,6 +96,8 @@ namespace SpritePacker.Viewmodel
                 return (PackerMan.SubspriteList.Count > 0);
             }
         }
+
+        private string savePath;
 
         private SubspriteViewmodel _selectedSubsprite;
         public SubspriteViewmodel SelectedSubsprite
@@ -139,12 +153,19 @@ namespace SpritePacker.Viewmodel
             RemoveCommand = new PackerRemoveCom(this);
             ExportCommand = new PackerExportCom(this);
             PreviewCommand = new PackerPreviewCom(this);
+            NewCommand = new PackerNewCom(this);
 
             // Initialize SortAlgoEnum
             string[] enumNames = Enum.GetNames(typeof(SpritePacker.Model.Packer.SortingAlgos));
             SortAlgoEnum = enumNames;
 
             _subspriteList = new ObservableCollection<SubspriteViewmodel>();
+        }
+
+        public void NewAtlas()
+        {
+            PackerMan = new Packer();
+            SubspriteList = new ObservableCollection<SubspriteViewmodel>();
         }
 
         // Internal Calls to Model
@@ -200,36 +221,48 @@ namespace SpritePacker.Viewmodel
         }
         public void ExportAtlas()
         {
-            // prompt for save
-            ImageIO imageHandler = new ImageIO();
+            if (savePath == null)
+            {
 
-            // create save dialog
-            Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
-            saveDiag.FileName = "atlas.png";
-            saveDiag.AddExtension = true;
-            saveDiag.Filter = ImageIO.BuildFilterStr("p");
+                // prompt for save
+                ImageIO imageHandler = new ImageIO();
 
-            Nullable<bool> diagResult = saveDiag.ShowDialog();
+                // create save dialog
+                Microsoft.Win32.SaveFileDialog saveDiag = new Microsoft.Win32.SaveFileDialog();
+                saveDiag.FileName = "atlas.png";
+                saveDiag.AddExtension = true;
+                saveDiag.Filter = ImageIO.BuildFilterStr("p");
 
-            // User selected a save location
-            if (diagResult == true)
+                Nullable<bool> diagResult = saveDiag.ShowDialog();
+
+                // User selected a save location
+                if (diagResult == true)
+                {
+                    // Write Save Path for future saves
+                    savePath = saveDiag.FileName;
+                }
+                // User did not select a save location
+                else
+                {
+                    return;
+                }
+            }
+            else
             {
                 // Save BitmapImage
                 PackerMan.SortSubsprites();
                 PackerMan.BuildAtlas();
-                ImageIO.Save(PackerMan.Atlas, saveDiag.FileName);
+
+                ImageIO.Save(PackerMan.Atlas, savePath);
+
+                Path.GetFileNameWithoutExtension(savePath);
 
                 // Save XML
-                PackerMan.BuildXML(saveDiag.SafeFileName);
-                string xmlSavepath = Path.ChangeExtension(saveDiag.FileName, ".xml");
+                PackerMan.BuildXML(Path.GetFileName(savePath));
+                string xmlSavepath = Path.ChangeExtension(savePath, ".xml");
                 FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
                 PackerMan.AtlasXML.Save(xmlStream);
                 xmlStream.Close();
-            }
-            // User did not select a save location
-            else
-            {
-                return;
             }
         }
 

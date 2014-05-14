@@ -75,6 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="Viewmodel\PackerAddCom.cs" />
     <Compile Include="Viewmodel\PackerExportCom.cs" />
+    <Compile Include="Viewmodel\PackerNewCom.cs" />
     <Compile Include="Viewmodel\PackerPreviewCom.cs" />
     <Compile Include="Viewmodel\PackerRemoveCom.cs" />
     <Compile Include="Viewmodel\PackerViewmodel.cs" />

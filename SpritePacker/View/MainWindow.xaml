@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Sprite Packer - Main" Height="350" Width="500"
         xmlns:local="clr-namespace:SpritePacker.View">
-    <Window.InputBindings>
-        <KeyBinding Key="ESC" Command="{x:Static local:CustomCommands.Exit}"/>
-    </Window.InputBindings>
     <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="NewCanExecute" Executed="OnNewExecuted"/>
+        <CommandBinding Command="Open" CanExecute="OpenCanExecute" Executed="OnOpenExecuted"/>
+        <CommandBinding Command="Save" CanExecute="SaveCanExecute" Executed="OnSaveExecuted"/>
+        <CommandBinding Command="SaveAs" CanExecute="SaveAsCanExecute" Executed="OnSaveAsExecuted"/>
         <CommandBinding Command="{x:Static local:CustomCommands.Exit}" Executed="OnExitExecuted"></CommandBinding>
         <CommandBinding Command="{x:Static local:CustomCommands.AboutProject}" Executed="OnAboutProjectExecuted"></CommandBinding>
     </Window.CommandBindings>
@@ -21,6 +22,7 @@
         <!--Menu Bar-->
         <Menu Grid.Row="0" Name="MenuBar" HorizontalAlignment="Stretch"  VerticalAlignment="Top">
             <MenuItem Header="_File">
+                <MenuItem Name="fileNew" Header="_New" Command="New" InputGestureText="Ctrl+N"/>
                 <MenuItem Name="fileOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                 <MenuItem Name="fileSave" Header="_Save..." Command="Save" InputGestureText="Ctrl+S"/>
                 <MenuItem Name="fileSaveAs" Header="_Save As..." Command="SaveAs" InputGestureText="Ctrl+Alt+S"/>

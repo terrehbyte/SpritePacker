@@ -20,7 +20,10 @@ namespace SpritePacker.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
+        SpritePacker.Model.Packer packerSprite;
+        SpritePacker.Viewmodel.PackerViewmodel packerViewmodel;
+
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         public MainWindow()
         {
             InitializeComponent();
@@ -29,8 +32,10 @@ namespace SpritePacker.View
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnExHandler);
 
 
-            SpritePacker.Model.Packer packerSprite = new SpritePacker.Model.Packer();
-            DataContext = new SpritePacker.Viewmodel.PackerViewmodel(packerSprite);
+            packerSprite = new SpritePacker.Model.Packer();
+            packerViewmodel = new SpritePacker.Viewmodel.PackerViewmodel(packerSprite);
+            
+            DataContext = packerViewmodel;
         }
 
         private void OnExitExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -53,6 +58,70 @@ namespace SpritePacker.View
             Console.WriteLine("UnExHandler caught: " + e.Message);
             Console.WriteLine("Runtime terminating: {0}", args.IsTerminating);
         }
+
+        #region Commands
+        private void OnNewExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            packerViewmodel.NewAtlas();
+        }
+        private void OnOpenExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            packerViewmodel.AddSubsprite();
+        }
+        private void OnSaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            packerViewmodel.ExportAtlas();
+        }
+        private void OnSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            packerViewmodel.ExportAtlas();
+        }
+        
+        private void NewCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (packerViewmodel.CanNew)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void OpenCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (packerViewmodel.CanAdd)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void SaveCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (packerViewmodel.CanExport)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        private void SaveAsCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (packerViewmodel.CanExport)
+            {
+                e.CanExecute = true;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+        #endregion
     }
 
     
@@ -73,7 +142,6 @@ namespace SpritePacker.View
                 return (exitCommand);
             }
         }
-
         public static RoutedCommand AboutProject
         {
             get
