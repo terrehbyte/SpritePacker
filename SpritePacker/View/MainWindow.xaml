@@ -69,8 +69,8 @@
             </StackPanel>
 
             <!--Right Panel-->
-            <ScrollViewer Grid.Column="2">
-                <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{Binding PackerMan.Atlas, UpdateSourceTrigger=PropertyChanged}"></Canvas>
+            <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image Stretch="None"  Source="{Binding PackerMan.Atlas, UpdateSourceTrigger=PropertyChanged}"/>
             </ScrollViewer>
             
             
