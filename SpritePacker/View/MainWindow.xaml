@@ -42,29 +42,45 @@
             </Grid.ColumnDefinitions>
             
             <!--Left Panel-->
-            <StackPanel Grid.Column="0" Orientation="Vertical">
-                <ListBox ItemsSource="{Binding SubspriteList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubsprite}"/>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button HorizontalAlignment="Center" Command="{Binding AddCommand}">Add</Button>
-                    <Button HorizontalAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
-                </StackPanel>
-                
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox Name="AlgoCombobox" ItemsSource="{Binding SortAlgoEnum}" SelectedValue="{Binding PackerMan.DesiredSort}"/>
-                    <Label Content="Sort Method" HorizontalAlignment="Left" Target="{Binding AlgoCombobox}"></Label>
-                </StackPanel>
-                <CheckBox Content="Power of Two" IsChecked="{Binding PackerMan.PowerOfTwo}"></CheckBox>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".3*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <ScrollViewer Grid.Row="0">
+                    <ListBox ItemsSource="{Binding SubspriteList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedSubsprite}"/>
+                </ScrollViewer>
+                <GridSplitter HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Grid.Row="1" ResizeBehavior="PreviousAndNext"
+                          Height="5" Background="GhostWhite"></GridSplitter>
+                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Vertical">
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Name="OffsetValue" Text="{Binding PackerMan.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                    <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
-                </StackPanel>
 
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button Content="Preview" HorizontalAlignment="Center" Command="{Binding PreviewCommand}"></Button>
-                    <Button Content="Export" HorizontalAlignment="Center" Command="{Binding ExportCommand}"></Button>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button HorizontalAlignment="Center" Command="{Binding AddCommand}">Add</Button>
+                        <Button HorizontalAlignment="Center" Command="{Binding RemoveCommand}">Remove</Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox Name="AlgoCombobox" ItemsSource="{Binding SortAlgoEnum}" SelectedValue="{Binding PackerMan.DesiredSort}"/>
+                        <Label Content="Sort Method" HorizontalAlignment="Left" Target="{Binding AlgoCombobox}"></Label>
+                    </StackPanel>
+                    <CheckBox Content="Power of Two" IsChecked="{Binding PackerMan.PowerOfTwo}"></CheckBox>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="OffsetValue" Text="{Binding PackerMan.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button Content="Preview" HorizontalAlignment="Center" Command="{Binding PreviewCommand}"></Button>
+                        <Button Content="Export" HorizontalAlignment="Center" Command="{Binding ExportCommand}"></Button>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
+            
 
             <!--Right Panel-->
             <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
