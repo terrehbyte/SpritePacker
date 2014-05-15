@@ -247,23 +247,21 @@ namespace SpritePacker.Viewmodel
                     return;
                 }
             }
-            else
-            {
-                // Save BitmapImage
-                PackerMan.SortSubsprites();
-                PackerMan.BuildAtlas();
 
-                ImageIO.Save(PackerMan.Atlas, savePath);
+            // Save BitmapImage
+            PackerMan.SortSubsprites();
+            PackerMan.BuildAtlas();
 
-                Path.GetFileNameWithoutExtension(savePath);
+            ImageIO.Save(PackerMan.Atlas, savePath);
 
-                // Save XML
-                PackerMan.BuildXML(Path.GetFileName(savePath));
-                string xmlSavepath = Path.ChangeExtension(savePath, ".xml");
-                FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
-                PackerMan.AtlasXML.Save(xmlStream);
-                xmlStream.Close();
-            }
+            Path.GetFileNameWithoutExtension(savePath);
+
+            // Save XML
+            PackerMan.BuildXML(Path.GetFileName(savePath));
+            string xmlSavepath = Path.ChangeExtension(savePath, ".xml");
+            FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
+            PackerMan.AtlasXML.Save(xmlStream);
+            xmlStream.Close();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
