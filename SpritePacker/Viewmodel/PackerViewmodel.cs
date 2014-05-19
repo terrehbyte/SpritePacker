@@ -11,7 +11,8 @@ using System.IO;            // FileStream
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;            
+using System.ComponentModel;
+using System.Windows.Media.Imaging;            
 
 // @terry - consider having the viewmodel completely wrap the model
 
@@ -57,6 +58,7 @@ namespace SpritePacker.Viewmodel
             set
             {
                 _packerMan = value;
+                _packerMan.PropertyChanged += new PropertyChangedEventHandler(packer_PropertyChanged);
             }
         }
 
@@ -96,6 +98,21 @@ namespace SpritePacker.Viewmodel
                 return (PackerMan.SubspriteList.Count > 0);
             }
         }
+
+        private BitmapImage _atlas;
+        public BitmapImage Atlas
+        {
+            get
+            {
+                return _atlas;
+            }
+            set
+            {
+                _atlas = value;
+                OnPropertyChanged("Atlas");
+            }
+        }
+
 
         private string savePath;
 
@@ -165,7 +182,11 @@ namespace SpritePacker.Viewmodel
         public void NewAtlas()
         {
             PackerMan = new Packer();
+            OnPropertyChanged(null);    // refresh everything
+
             SubspriteList = new ObservableCollection<SubspriteViewmodel>();
+            savePath = null;
+            Atlas = null;
         }
 
         // Internal Calls to Model
@@ -252,7 +273,7 @@ namespace SpritePacker.Viewmodel
             PackerMan.SortSubsprites();
             PackerMan.BuildAtlas();
 
-            ImageIO.Save(PackerMan.Atlas, savePath);
+            ImageIO.Save(Atlas, savePath);
 
             Path.GetFileNameWithoutExtension(savePath);
 
@@ -262,6 +283,21 @@ namespace SpritePacker.Viewmodel
             FileStream xmlStream = new FileStream(xmlSavepath, FileMode.Create);
             PackerMan.AtlasXML.Save(xmlStream);
             xmlStream.Close();
+        }
+
+        // Event Subscription to Model
+        void packer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case ("Atlas"): // update the vm atlas whenever the model does
+                        {
+                            Atlas = PackerMan.Atlas;
+                            break;
+                        }
+                default:
+                    break;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

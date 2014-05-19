@@ -68,10 +68,10 @@
                         <ComboBox Name="AlgoCombobox" ItemsSource="{Binding SortAlgoEnum}" SelectedValue="{Binding PackerMan.DesiredSort}"/>
                         <Label Content="Sort Method" HorizontalAlignment="Left" Target="{Binding AlgoCombobox}"></Label>
                     </StackPanel>
-                    <CheckBox Content="Power of Two" IsChecked="{Binding PackerMan.PowerOfTwo}"></CheckBox>
+                    <CheckBox Content="Power of Two" IsChecked="{Binding PackerMan.PowerOfTwo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Name="OffsetValue" Text="{Binding PackerMan.Offset, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <TextBox Name="OffsetValue" Text="{Binding PackerMan.Offset, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
                         <Label Content="Pixel Offset" HorizontalContentAlignment="Left" Target="{Binding ElementName=OffsetValue}"></Label>
                     </StackPanel>
 
@@ -92,13 +92,13 @@
 
             <!--Right Panel-->
             <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Image Stretch="None"  Source="{Binding PackerMan.Atlas, UpdateSourceTrigger=PropertyChanged}"/>
+                <Image Stretch="None"  Source="{Binding Atlas, UpdateSourceTrigger=PropertyChanged}"/>
             </ScrollViewer> 
         </Grid>
         
         <!--Status Bar-->
         <StatusBar Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
-            <TextBlock Text="{Binding SelectedSubsprite.Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            <TextBlock Text="{Binding Atlas.Width, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StatusBar>
     </Grid>
 </Window>
