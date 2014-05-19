@@ -149,22 +149,13 @@ namespace SpritePacker.Model
                 iTotalWidth += Offset;
             }
 
-            int iTotalHeight = 0;
-
             // Get the biggest height
+            int iTotalHeight = SubspriteList[0].bitmapData.PixelHeight;
 
-            // edge case of one image
-            if (SubspriteList.Count == 1)
+            for (int i = 0; i < SubspriteList.Count; i++)
             {
-                iTotalHeight = SubspriteList[0].bitmapData.PixelHeight;
-            }
-            else
-            {
-                for (int i = 1; i < SubspriteList.Count - 1; i++)
-                {
-                    iTotalHeight = Math.Max(SubspriteList[i - 1].bitmapData.PixelHeight,
-                                            SubspriteList[i].bitmapData.PixelHeight);
-                }
+                iTotalHeight = Math.Max(iTotalHeight,
+                                        SubspriteList[i].bitmapData.PixelHeight);
             }
 
             // @terrehbyte: When should the offset be added in?
